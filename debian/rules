@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# debian/rules that uses debhelper.
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
+# This project don't need to test
+override_dh_auto_test:
+	true
+
+%:
+	dh $@ --with autotools-dev 
+

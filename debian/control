@@ -1,0 +1,15 @@
+Source: noip
+Section: network
+Priority: extra
+Maintainer: Trần Ngọc Quân <vnwildman@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev
+Standards-Version: 3.9.4
+Homepage: http://www.no-ip.com
+#Vcs-Git: git://git.debian.org/collab-maint/noip.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/noip.git;a=summary
+
+Package: noip
+Architecture: any
+Depends: wget, ${shlibs:Depends}, ${misc:Depends}
+Description: no-ip.com dynamic IP update client for Linux
+ noip...

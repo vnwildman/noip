@@ -1,0 +1,68 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          noip
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: noip init for systemV
+# Description:       noip, a second-generation Linux client for the 
+#                    no-ip.com dynamic DNS service.
+### END INIT INFO
+
+# Supplied by no-ip.com
+# Modified for Debian GNU/Linux by Eivind L. Rygge <eivind@rygge.org>
+# corrected 1-17-2004 by Alex Docauer <alex@docauer.net>
+# 26/10/13 by Trần Ngọc Quân <vnwildman@gmail.com>
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC=noip                  # Introduce a short description here
+NAME=noip                  # Introduce the short server's name here
+DAEMON=/usr/sbin/$NAME     # Introduce the server's location here
+DAEMON_ARGS=""             # Arguments to run the daemon with
+SCRIPTNAME=/etc/init.d/$NAME
+
+
+test -x $DAEMON || exit 0
+
+# Create conf file if you don't have
+if [ ! -f /etc/no-ip.conf ] ; then /usr/sbin/noip -C; fi
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+case "$1" in
+    start)
+		echo -n "Starting dynamic address update: "
+		start-stop-daemon --start --exec $DAEMON
+		echo "noip."
+    ;;
+    stop)
+		echo -n "Shutting down dynamic address update:"
+		start-stop-daemon --stop --oknodo --retry 30  --exec $DAEMON
+		echo "noip."
+    ;;
+    status)
+       status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+       ;;
+    restart)
+		echo -n "Restarting dynamic address update: "
+		start-stop-daemon --stop --oknodo --retry 30 --exec $DAEMON
+		start-stop-daemon --start --exec $DAEMON
+		echo "noip."
+    ;;
+
+    *)
+		echo "Usage: $0 {start|stop|restart|status}" >&2
+		exit 3
+	;;
+esac
+exit 0
+

@@ -1,0 +1,150 @@
+noip (2.2.4rc1) unstable; urgency=low
+
+  * Initial debian package office support.
+  * Add autotools
+  * Add manpage
+
+ -- Trần Ngọc Quân <vnwildman@gmail.com>  Tue, 01 Oct 2013 14:24:20 +0700
+
+noip (2.2.3) unstable; urgency=low
+
+  *	stripped out force update code which used 'wget'
+  *	noip.com added a CAPCHA to foil machine updates
+  *	added new code to once again circumvent those pesky emails
+
+ -- johna <johna@onevista.com>  Tue, 28 May 2013 10:21:10 +0700
+
+noip (2.1.9) stable; urgency=low
+
+  *	hardened force_update() to prevent possible buffer overflow
+  *	hardened autoconf() the same way
+  *	patch suggested by xenomuta@phreaker.net
+
+ -- johna <johna@onevista.com> November 2008
+
+noip (2.1.8) unstable; urgency=low
+
+  *	December 2007 (johna)	version 2.1.8  (not generally released)
+  *	reworked forced update code to use 'wget' and the
+  *	hostactivate.php script at www.no-ip.com
+  *	I discovered that no-ip.com still sent warning email
+  *	  about unused hosts when their address had not changed even
+  *	though they had been updated two days ago by this program!
+
+  *	November 2008 (johna)	still version 2.1.8
+  *	added check of returned IP address in get_our_visble_IP_addr
+  * 	hardened GetNextLine to prevent possible buffer overflow
+  *	    exploit claimed by J. Random Cracker but never demonstrated
+  *	it relied on DNS subversion and buffer overflow
+
+ -- johna <johna@onevista.com> November 2008
+
+noip (2.1.7) unstable; urgency=low
+
+  *	fixed bug introduced in 2.1.6 where errors from multiple
+  *	instances were not diplayed due to stderr being closed
+  *	added version number into shared mem and -S display
+
+ -- johna <johna@onevista.com> August 2007
+
+noip (2.1.6) unstable; urgency=low
+
+  *	added fclose() for stdin, stdout & stderr to child
+  *	made Force_Update work on 30 day intervals
+
+ -- johna <johna@onevista.com> August 2007
+
+noip (2.1.5) unstable; urgency=low
+
+  *	updated noip2.c: added SkipHeaders() instead of the magic 6 line pass
+  *	Changed to ip1.dynupdate.no-ip.com for ip retrieval
+
+ -- johna <johna@onevista.com> February 21, 2007
+
+noip (2.1.4) unstable; urgency=low
+
+  *	added code to handle new pedantic version of gcc
+  *	made signed/unsigned char assignments explicit
+
+ -- johna <johna@onevista.com> February 2006
+
+noip (2.1.3) unstable; urgency=low
+
+  *	added shm dump code for debugging broken libraries
+  *	added -z flag to invoke shm dump code
+
+ -- johna <johna@onevista.com> August 2005
+
+noip (2.1.2) unstable; urgency=low
+
+  *	removed -Y in make install rule
+
+ -- johna <johna@onevista.com> April 2004
+
+noip (2.1.1) unstable; urgency=low
+
+  *	added -u, -p and -x options for LR101 project
+
+ -- johna <johna@onevista.com> January 2004
+
+noip (2.1) unstable; urgency=low
+
+  *	March 2003	(johna)
+  *	bumped MAX_NET_DEVS to 24
+  *	drop root privs after acquiring conf (by Michal Ambroz)
+  *	added -I interface_name flag (by Clifford Kite)
+
+  *	April 2003	(johna)
+  *	avoid listing IPV6 devices (robc at gmx.de)
+
+  *	May 2003	(johna)
+  *	replaced sleep(x) with select(1,0,0,0,timeout)
+  *	added getifaddrs() for recent BSD systems (Peter Stromberg)
+  *	added new SIOCGIFCONF for older BSD systems (Peter Stromberg)
+
+  *	November 2003 (johna)
+  *	added <CR> into all http requests along with <LF>
+  *	added SIGCHLD handler to reap zombies
+  *	added location logic and revamped XML parsing
+  *	added User-Agent field to settings.php request
+
+ -- johna <johna@onevista.com> January 2004
+
+noip (2.0) unstable; urgency=low
+
+  *	November 4, 2000
+  *	updated noip.c and Makefile to build on solaris also
+  *	   collapsed expanded code into strerror()
+  *	suggested by rob_nielson@mailandnews.com
+
+  *	December 2, 2000
+  *	updated noip.c to build on BSD also
+  *	changed #include <linux/if.h> to #include <net/if.h>
+  *	suggested by ramanan@users.sourceforge.net
+
+  *	April 27, 2001 (Stephane Neveu stephane@skylord.org)
+  *	changed the "SAVEDIPFILE" from /tmp/no-ip_save to
+  *     /var/run/no-ip_save
+  *	added configuration default lookup into /usr/local/etc
+  *    if /usr/local/lib doesn't have a configuration file
+  *	fix output of contextual ourname[hostnum] in the function
+  *    handle_dynup_error() instead of the "first" name
+
+  *	August 27, 2001 (johna)
+  *	added GROUP concept
+  *	removed multiple host/domain name hack (use groups)
+  *	changed SAVEDIPFILE back to /tmp
+  *   (must be root to write in /var/run)
+
+  *	November 22, 2002 (johna)
+  *	changed vsprintf to vsnprintf to avoid buffer overflow
+
+  *	Version 2.0 December 2002 (johna -- major rewrite)
+  *	using shared memory
+  *	new config file format with autoconfig (-C)
+  *	multiple instances supported (-M)
+  *	status available for all instances (-S)
+  *	can terminate an instance (-K)
+  *	can toggle debugging for an instance (-D)
+
+ -- johna <johna@onevista.com> December 2002

@@ -1,0 +1,8 @@
+debian/noip/*
+*~
+*.cbp
+*.layout
+*.o
+*.log
+*.ex
+*.EX

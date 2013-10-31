@@ -1,0 +1,4 @@
+* rpm package (write spec file)
+* introduce no-ip protocol
+* use libcurl instead of wget
+* support ssl (openssl or gnutls)
