@@ -30,6 +30,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "config.h"
+#include "https.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -59,30 +60,8 @@
 #include <pwd.h>
 #include <time.h>
 
-#ifdef bsd_with_getifaddrs
-#include <ifaddrs.h>
-#include <net/if_types.h>
-#endif
-
-#ifdef bsd
-#include <sys/sockio.h>
-#include <net/if_types.h>
-#endif
-
-#ifdef linux
-#ifndef SIOCGIFADDR
-#include <linux/sockios.h>
-#endif
-#endif
-
-#ifdef sun
-#include <sys/sockio.h>
-#endif
-
-//#define DEBUG
-
 #define ENCRYPT			1
-#define FORCE_UPDATE		1
+#define FORCE_UPDATE	1
 
 #define MAX(x,y)		(((x)>(y))?(x):(y))
 
@@ -91,33 +70,27 @@
 #define CONNECT_TIMEOUT		60
 #define FORCE_INTERVAL		(1440 * 15)	// 15 days in minutes
 
-#define IPLEN			16
-#define LINELEN 	        256
-#define BIGBUFLEN		16384
-
-
 #define NOIP_NAME		"dynupdate.no-ip.com"
 #define NOIP_IP_SCRIPT	"ip1.dynupdate.no-ip.com"
-#define CLIENT_IP_PORT		8245
+#define CLIENT_IP_PORT	8245
 
-#define NOIP_PGM		"/local/bin/noip2"
 #define TEMP_ADDR		"127.0.0.1"
 
-#define USER_AGENT		"User-Agent: Linux-DUC/"VERSION
-#define SETTING_SCRIPT		"settings.php?"
+#define USER_AGENT		"User-Agent: Linux-DUC/" VERSION
+#define SETTING_SCRIPT	"settings.php?"
 #define USTRNG			"username="
 #define PWDSTRNG		"&pass="
 #if ENCRYPT
-#define REQUEST		"requestL="
+	#define REQUEST		"requestL="
 #else
-#define REQUEST		""
+	#define REQUEST		""
 #endif
-#define UPDATE_SCRIPT		"ducupdate.php"
+#define UPDATE_SCRIPT	"ducupdate.php"
 
 #ifdef DEBUG
-#define OPTCHARS		"CYU:Fc:dD:hp:u:x:SMi:K:I:z"
+	#define OPTCHARS	"CYU:Fc:dD:hp:u:x:SMi:K:I:z"
 #else
-#define OPTCHARS		"CYU:Fc:hp:u:x:SMi:K:I:z"
+	#define OPTCHARS	"CYU:Fc:hp:u:x:SMi:K:I:z"
 #endif
 #define ARGC			1
 #define ARGF			(1<<1)
@@ -143,20 +116,18 @@
 #define CONFIG_FILENAME	CONFIG_FILEPATH "/no-ip.conf"
 #define CONFSTRLEN		1024
 #define MAX_DEVLEN		16
-#define MAX_INSTANCE		4
-#define MAX_NET_DEVS		48
+#define MAX_INSTANCE	4
+#define MAX_NET_DEVS	48
 #define B64MOD			4
-#define CONFIG_MAGIC		0x414a324c
+#define CONFIG_MAGIC	0x414a324c
 #define NOIP_KEY		0x50494f4e
 #define SHMEM_SIZE		(MAX_INSTANCE * sizeof(struct INSTANCE))
 #define DEFAULT_NAT_INTERVAL	30
-// WGET come from autoconfig.ac
-#define WGET_PGM		WGET
 
-#define SPACE			' '
-#define EQUALS			'='
-#define COMMENT			'#'
-#define COMMA                   ','
+#define SPACE    ' '
+#define EQUALS   '='
+#define COMMENT  '#'
+#define COMMA    ','
 
 #define ALREADYSET               0
 #define SUCCESS                  1
@@ -174,13 +145,13 @@
 
 #define UNKNOWNERR		-1
 #define FATALERR		-1
-#define NOHOSTLOOKUP		-2
+#define NOHOSTLOOKUP	-2
 #define SOCKETFAIL		-3
 #define CONNTIMEOUT		-4
 #define CONNFAIL		-5
 #define READTIMEOUT		-6
 #define READFAIL		-7
-#define WRITETIMEOUT		-8
+#define WRITETIMEOUT	-8
 #define WRITEFAIL		-9
 #define NOCONFIG		-10
 #define BADCONFIG1		-11
@@ -189,6 +160,30 @@
 #define BADCONFIG4		-14
 #define BADCONFIG5		-15
 #define BADCONFIG6		-16
+
+#ifdef  HAVE_IFADDRS_H
+#ifdef  HAVE_NET_IF_TYPES_H
+#include <ifaddrs.h>
+#include <net/if_types.h>
+#endif
+#endif
+
+#ifdef bsd
+#include <sys/sockio.h>
+#include <net/if_types.h>
+#endif
+
+#ifdef HAVE_LINUX_SOCKIOS_H
+#ifndef SIOCGIFADDR
+#include <linux/sockios.h>
+#endif
+#endif
+
+#ifdef sun
+#include <sys/sockio.h>
+#endif
+
+#include "common.h"
 
 #define CMSG01	"Can't locate configuration file %s. (Try -c). Ending!\n"
 #define CMSG02	"'%s' is a badly constructed configuration file. Ending!\n"
@@ -248,15 +243,15 @@ int	background		=	1;	// new default
 int	port_to_use		=	CLIENT_IP_PORT;
 int	socket_fd		=	-1;
 int	config_fd		=	-1;
-int	nat			=	0;
+int	nat				=	0;
 int	interval		=	0;
 int	log2syslog		= 	0;
-int	connect_fail		=	0;
-int     offset                  =       0;
+int	connect_fail	=	0;
+int offset          =   0;
 int	needs_conf 		=	0;
 int	firewallbox		=	0;
 int	forceyes		=	0;
-int	update_cycle		=	0;
+int	update_cycle	=	0;
 int	show_config		=	0;
 int	shmid			=	0;
 int	multiple_instances	=	0;
@@ -264,7 +259,7 @@ int	debug_toggle		=	0;
 int	kill_proc		=	0;
 int	reqnum			=	0;
 int	prompt_for_executable	=	1;
-int	shm_dump_active		=	0;
+int	shm_dump_active	=	0;
 int	dummy			=	0;
 void	*shmaddr		=	NULL;
 char	*program		=	NULL;
@@ -329,7 +324,7 @@ struct SETTINGS
 
 struct GROUPS
 {
-    char    *grp;
+    char *grp;
     int	use;
     int	count;
     int	ncount;
@@ -348,12 +343,12 @@ struct INSTANCE
 {
     int	pid;
     int	Force_Update;
-    char	debug;
-    char	version;
-    short	interval;
-    char	Last_IP_Addr[IPLEN];
-    char	cfilename[LINELEN];
-    char	args[LINELEN - (2 *IPLEN)];
+    char debug;
+    char version;
+    short interval;
+    char Last_IP_Addr[IPLEN];
+    char cfilename[LINELEN];
+    char args[LINELEN - (2 *IPLEN)];
 } *my_instance = NULL;
 
 struct SHARED

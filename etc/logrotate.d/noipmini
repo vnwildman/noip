@@ -1,0 +1,10 @@
+/var/log/noip.log {
+  rotate 12
+  monthly
+  compress
+  missingok
+  nocreate
+  notifempty
+  size 100k
+}
+

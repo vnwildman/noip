@@ -1,0 +1,16 @@
+Reference:
+http://www.debian.org/doc/manuals/maint-guide/
+http://www.debian.org/doc/debian-policy/
+http://www.isotton.com/debian/docs/repository-howto/repository-howto.html
+http://www.wiggy.net/presentations/2001/DebianWalkThrough/handouts/handouts.html
+---------------------------------------------
+
+On top of source tree, run:
+$ dpkg-buildpackage -us -uc
+
+Note:
+ * Use -d do not check build dependencies and conflicts.
+ * Use -b -nc if you don't want to build from begin
+ * Use -b if you just want to build binary package.
+ * See `dpkg-buildpackage --help` and/or dpkg-buildpackage(1)
+

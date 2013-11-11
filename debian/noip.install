@@ -1,0 +1,4 @@
+etc/init.d/noip
+etc/logrotate.d/noip
+usr/sbin/noip
+usr/share/man/man1/noip.1*

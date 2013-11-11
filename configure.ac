@@ -6,7 +6,6 @@ AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
-AC_CHECK_PROGS([WGET], [wget],,[AC_MSG_ERROR([missing wget, please install it])])
 
 AC_ARG_ENABLE(debug,
 AS_HELP_STRING([--enable-debug],[enable debugging, default: no]),
@@ -17,9 +16,10 @@ AS_HELP_STRING([--enable-debug],[enable debugging, default: no]),
  esac])
 
 # Checks for libraries.
+AC_CHECK_LIB([curl], [curl_easy_init], AC_DEFINE([HAVE_CURL], [1], [Use curl instead of wget]))
 
 # Checks for header files.
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h syslog.h termios.h unistd.h])
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h syslog.h termios.h unistd.h ifaddrs.h linux/sockios.h net/if_types.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
@@ -30,7 +30,6 @@ AC_FUNC_MALLOC
 AC_CHECK_FUNCS([alarm gethostbyname inet_ntoa memset realpath select socket strchr strerror strncasecmp strrchr strstr])
 
 AC_DEFINE([COPYRIGHT_YEAR], [m4_esyscmd([date +%Y])], [Current year that use in copyright message])
-AC_DEFINE([WGET], ["/usr/bin/wget"], [Define full pathname of wget.])
 
 AC_CONFIG_FILES([
  Makefile

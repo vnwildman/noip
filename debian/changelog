@@ -1,8 +1,11 @@
-noip (2.2.4rc1) unstable; urgency=low
+noip (2.2.4rc1) UNRELEASED; urgency=low
 
-  * Initial debian package office support.
+  * Initial debian package office support
   * Add autotools
-  * Add manpage
+  * Add noip manpage
+  * Use libcurl (ssl/tls)
+  * Add noipmini, a simple bash scripts, and cron.hourly for it
+  * Add logrotate
 
  -- Trần Ngọc Quân <vnwildman@gmail.com>  Tue, 01 Oct 2013 14:24:20 +0700
 

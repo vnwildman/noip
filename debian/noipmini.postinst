@@ -17,10 +17,25 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+conf=/etc/noipmini.conf
+makeconf(){
+	echo "#!/usr/bash" > $conf
+	echo "Enter your username:"
+	read username
+	echo "Enter your password:"
+	read password
+	echo "Enter your host list, separage by comma:"
+	read hostlist
+	echo -e "username='$username'\npass='$password'\nhostlist='$hostlist'\n" >> $conf
+	chmod 600 $conf
+}
 
 case "$1" in
     configure)
-       if [ ! -f /etc/no-ip.conf ] ; then /usr/sbin/noip -C; fi
+		if [ ! -f $conf ] ; then
+			makeconf
+		fi
+.       /etc/cron.hourly/noipmini		
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

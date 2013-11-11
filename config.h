@@ -13,6 +13,9 @@
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
 
+/* Use curl instead of wget */
+#define HAVE_CURL 1
+
 /* Define to 1 if you have the <fcntl.h> header file. */
 #define HAVE_FCNTL_H 1
 
@@ -22,11 +25,17 @@
 /* Define to 1 if you have the `gethostbyname' function. */
 #define HAVE_GETHOSTBYNAME 1
 
+/* Define to 1 if you have the <ifaddrs.h> header file. */
+#define HAVE_IFADDRS_H 1
+
 /* Define to 1 if you have the `inet_ntoa' function. */
 #define HAVE_INET_NTOA 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
+
+/* Define to 1 if you have the <linux/sockios.h> header file. */
+#define HAVE_LINUX_SOCKIOS_H 1
 
 /* Define to 1 if your system has a GNU libc compatible `malloc' function, and
    to 0 otherwise. */
@@ -43,6 +52,9 @@
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #define HAVE_NETINET_IN_H 1
+
+/* Define to 1 if you have the <net/if_types.h> header file. */
+/* #undef HAVE_NET_IF_TYPES_H */
 
 /* Define to 1 if you have the `realpath' function. */
 #define HAVE_REALPATH 1
@@ -142,9 +154,6 @@
 
 /* Version number of package */
 #define VERSION "2.2.4rc1"
-
-/* Define full pathname of wget. */
-#define WGET "/usr/bin/wget"
 
 /* Define to rpl_malloc if the replacement function should be used. */
 /* #undef malloc */

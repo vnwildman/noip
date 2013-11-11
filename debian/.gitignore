@@ -1,0 +1,8 @@
+noip
+noipmini
+tmp
+files
+*~
+*.ex
+*.substvars
+*.debhelper.log

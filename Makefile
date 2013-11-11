@@ -265,7 +265,6 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 2.2.4rc1
-WGET = 
 abs_builddir = /mnt/E/MyProjects/noip
 abs_srcdir = /mnt/E/MyProjects/noip
 abs_top_builddir = /mnt/E/MyProjects/noip
@@ -310,7 +309,7 @@ top_builddir = .
 top_srcdir = .
 SUBDIRS = src etc
 dist_doc_DATA = README NEWS AUTHORS TODO LIESMICH.ERST.deutsch README.FRANCAIS README.SWE \
-   COPYING LISEZMOI.ENPREMIER README.ITALIANO README.JAPANESE
+   COPYING LISEZMOI.ENPREMIER README.ITALIANO README.JAPANESE PROTOCOL
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
