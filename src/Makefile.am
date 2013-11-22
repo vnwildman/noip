@@ -1,5 +1,5 @@
 sbin_PROGRAMS = noip
-noip_SOURCES = noip2.c https.c
+noip_SOURCES = noip2.c
 AM_CPPFLAGS = -I$(srcdir) -I$(top_srcdir) -DSYSCONFDIR='"@sysconfdir@"'
 noip_LDADD = -lc -lcurl
 dist_man1_MANS = noip.1

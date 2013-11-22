@@ -1,6 +1,6 @@
 AC_PREREQ([2.69])
 AC_INIT([noip], [2.2.4rc1], [bug@no-ip.com],, [http://www.no-ip.com])
-AM_INIT_AUTOMAKE([-Wall -Werror])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_CONFIG_SRCDIR([src/noip2.c])
 AC_CONFIG_HEADERS([config.h])
 
