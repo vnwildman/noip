@@ -17,9 +17,8 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-conf=/etc/noipmini.conf
+conf=/etc/mininoip.conf
 makeconf(){
-	echo "#!/usr/bash" > $conf
 	echo "Enter your username:"
 	read username
 	echo "Enter your password:"
@@ -35,7 +34,7 @@ case "$1" in
 		if [ ! -f $conf ] ; then
 			makeconf
 		fi
-.       /etc/cron.hourly/noipmini		
+.       /etc/cron.hourly/mininoip
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
@@ -52,4 +51,4 @@ esac
 
 #DEBHELPER#
 
-exit 0
+

@@ -1,13 +1,15 @@
-noip (2.2.4rc1) UNRELEASED; urgency=low
+noip (2.2.4rc1ubuntu2) UNRELEASED; urgency=low
 
   * Initial debian package office support
   * Add autotools
   * Add noip manpage
   * Use libcurl (ssl/tls)
-  * Add noipmini, a simple bash scripts, and cron.hourly for it
+  * Add mininoip, a simple bash scripts, and cron.hourly for it
   * Add logrotate
+  * add missing timestamp for mininoip's error log
+  * change noipmini->mininoip
 
- -- Trần Ngọc Quân <vnwildman@gmail.com>  Tue, 01 Oct 2013 14:24:20 +0700
+ -- Trần Ngọc Quân <vnwildman@gmail.com>  Wed, 27 Nov 2013 14:20:28 +0700
 
 noip (2.2.3) unstable; urgency=low
 

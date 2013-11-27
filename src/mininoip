@@ -1,22 +1,22 @@
-#!/bin/bash
+#!/bin/sh
 log='/var/log/noip.log'
 ipfile='/var/lib/noip/noip'
-if [[ -f /etc/noipmini.conf ]]; then
-. /etc/noipmini.conf
+if [ -f /etc/mininoip.conf ]; then
+. /etc/mininoip.conf
 else
-	echo "Missing configure file: /etc/noipmini.conf" >> $log
-	echo "See sample configure in /usr/share/doc/noipmini/noipmini.conf"
+	echo "`date '+%F %T'` Missing configure file: /etc/mininoip.conf" >> $log
+	echo "See sample configure in /usr/share/doc/mininoip/mininoip.conf"
 	exit -1
 fi
 
-if [[ ! -f $ipfile ]]; then
+if [ ! -f $ipfile ]; then
 	mkdir `dirname $ipfile` || exit -1
 	echo "192.168.1.1" > $ipfile
 fi
 
 myip=`wget -q -O- http://ip1.dynupdate.no-ip.com`
 # Check my ip chage or not
-if [[ "$myip" = "$(cat $ipfile)" ]]; then
+if [ "$myip" = "$(cat $ipfile)" ]; then
 	exit 0
 fi
 
@@ -63,7 +63,7 @@ then
 	esac
 fi
 # Remove temp file if it exit.
-if [[ -f $tmp ]]; then
+if [ -f $tmp ]; then
 	rm $tmp
 fi
 exit 0

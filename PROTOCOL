@@ -1,5 +1,5 @@
 See: <http://www.noip.com/integrate/>.
 -----------------------------------
-noipmini is a very simple example.
+mininoip is a very simple example.
 It use Bash script and communicate with server over https by wget.
 

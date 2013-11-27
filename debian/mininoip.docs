@@ -3,4 +3,4 @@ NEWS
 AUTHORS
 debian/DEBIAN.HOWTO
 PROTOCOL
-src/noipmini.conf
+src/mininoip.conf
