@@ -2,10 +2,13 @@
 *.cbp
 *.layout
 *.o
+*.a
 *.log
 *.status
 *.m4
 autom4te.cache
+configure
+Makefile.in
 Makefile
 config.h
 

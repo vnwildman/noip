@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 log='/var/log/noip.log'
 ipfile='/var/lib/noip/noip'
 if [ -f /etc/mininoip.conf ]; then
 . /etc/mininoip.conf
 else
-	echo "`date '+%F %T'` Missing configure file: /etc/mininoip.conf" >> $log
+	echo "$(date '+%F %T') Missing configure file: /etc/mininoip.conf" >> $log
 	echo "See sample configure in /usr/share/doc/mininoip/mininoip.conf"
 	exit -1
 fi
@@ -14,20 +14,20 @@ if [ ! -f $ipfile ]; then
 	echo "192.168.1.1" > $ipfile
 fi
 
-myip=`wget -q -O- http://ip1.dynupdate.no-ip.com`
+myip=$(wget -q -O- http://ip1.dynupdate.no-ip.com) || { echo "$(date '+%F %T') Can't get your ip" >> $log; exit -1; }
 # Check my ip chage or not
 if [ "$myip" = "$(cat $ipfile)" ]; then
 	exit 0
 fi
 
 echo $myip > $ipfile
-tmp="`tempfile`"
+tmp=$(tempfile)
 
 # Send request to server:
 if wget -q -O $tmp --http-user=$username --http-password=$pass \
 	https://dynupdate.no-ip.com/nic/update?hostname=$hostlist;
 then
-	echo "`date '+%F %T'` h[]=$hostlist: ip=$myip" >> $log
+	echo "$(date '+%F %T') h[]=$hostlist: ip=$myip" >> $log
 
 # Check Status, first word in response indicate status, the second normally is IP
 	read -a resp < $tmp

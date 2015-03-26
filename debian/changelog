@@ -1,4 +1,4 @@
-noip (2.2.4rc1ubuntu2) UNRELEASED; urgency=low
+noip (2.2.4ubuntu3) trusty; urgency=low
 
   * Initial debian package office support
   * Add autotools
@@ -8,6 +8,7 @@ noip (2.2.4rc1ubuntu2) UNRELEASED; urgency=low
   * Add logrotate
   * add missing timestamp for mininoip's error log
   * change noipmini->mininoip
+  * Log if mininoip can't get ip
 
  -- Trần Ngọc Quân <vnwildman@gmail.com>  Wed, 27 Nov 2013 14:20:28 +0700
 
