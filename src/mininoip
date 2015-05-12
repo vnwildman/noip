@@ -1,6 +1,6 @@
 #!/bin/bash
 log='/var/log/noip.log'
-ipfile='/var/lib/noip/noip'
+datadir='/var/lib/noip/'
 if [ -f /etc/mininoip.conf ]; then
 . /etc/mininoip.conf
 else
@@ -9,8 +9,13 @@ else
 	exit -1
 fi
 
-if [ ! -f $ipfile ]; then
-	mkdir `dirname $ipfile` || exit -1
+if [[ ! -d "$datadir" ]]; then
+  	mkdir $datadir
+fi
+
+ipfile=$datadir/noip
+
+if [ ! -f $datadir/noip ]; then
 	echo "192.168.1.1" > $ipfile
 fi
 

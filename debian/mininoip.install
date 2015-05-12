@@ -1,3 +1,5 @@
 etc/init/mininoip.conf
-etc/logrotate.d/mininoip
+etc/init.d/mininoip
+etc/logrotate.d/noip
 usr/sbin/mininoip
+

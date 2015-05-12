@@ -1,0 +1,34 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: mininoip
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# X-Start-Before:    $network
+# Short-Description: Start update IP address to noip at boot time
+# Description:       noip, a second-generation Linux client for the
+#                    no-ip.com dynamic DNS service.
+### END INIT INFO
+
+name='/usr/sbin/mininoip'
+stdout_log="/var/log/noip.log"
+
+case "$1" in
+    start)
+        test -x $name && $name || exit 0
+    ;;
+    restart|status)
+        echo "mininoip is NOT a daemon. So you can't do this action"
+    ;;
+
+    stop)
+    ;;
+    *)
+    echo "Usage: $0 start"
+    exit 1
+    ;;
+esac
+
+exit 0
+

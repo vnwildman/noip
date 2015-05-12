@@ -11,12 +11,14 @@ Vcs-Browser: https://github.com/vnwildman/noip
 Package: noip
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: mininoip
 Description: no-ip.com dynamic IP update client for Linux
  This daemon communication with server without ssl/tls
 
 Package: mininoip
 Architecture: all
 Depends: bash, wget, coreutils
+Conflicts: noip
 Description: mini no-ip.com dynamic IP update client for Linux
  mininoip community with noip server over https protocol
 
