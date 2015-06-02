@@ -1,0 +1,11 @@
+[Unit]
+Description=mini no-ip.com dynamic IP update
+After=network.target systemd-networkd-wait-online.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/mininoip wait
+
+[Install]
+WantedBy=multi-user.target
+

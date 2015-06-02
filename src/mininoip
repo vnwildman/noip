@@ -1,6 +1,6 @@
 #!/bin/bash
 log='/var/log/noip.log'
-datadir='/var/lib/noip/'
+datadir='/var/lib/noip'
 if [ -f /etc/mininoip.conf ]; then
 . /etc/mininoip.conf
 else
@@ -12,6 +12,13 @@ fi
 if [[ ! -d "$datadir" ]]; then
   	mkdir $datadir
 fi
+
+if [ "$#" = "2" -a "$1" = "wait" ]; then
+	# Wait util internet is available
+	while ! ping -q -c1 ip1.dynupdate.no-ip.com; do sleep 5s; done
+fi
+
+
 
 ipfile=$datadir/noip
 
