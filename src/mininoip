@@ -14,8 +14,8 @@ if [[ ! -d "$datadir" ]]; then
 fi
 
 if [ "$#" = "2" -a "$1" = "wait" ]; then
-	# Wait util internet is available
-	while ! ping -q -c1 ip1.dynupdate.no-ip.com; do sleep 5s; done
+	# Wait 30s for internet available
+	sleep 30
 fi
 
 
@@ -27,7 +27,7 @@ if [ ! -f $datadir/noip ]; then
 fi
 
 myip=$(wget -q -O- http://ip1.dynupdate.no-ip.com) || { echo "$(date '+%F %T') Can't get your ip" >> $log; exit -1; }
-# Check my ip chage or not
+# Check ip is chaged or not
 if [ "$myip" = "$(cat $ipfile)" ]; then
 	exit 0
 fi

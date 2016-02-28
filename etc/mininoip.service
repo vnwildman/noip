@@ -1,6 +1,6 @@
 [Unit]
-Description=mini no-ip.com dynamic IP update
-After=network.target systemd-networkd-wait-online.service
+Description=Mini no-ip.com dynamic IP update
+After=network.target systemd-networkd-wait-online.service network-online.target
 
 [Service]
 Type=oneshot

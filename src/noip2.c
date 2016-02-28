@@ -30,7 +30,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "config.h"
-#include "https.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -81,16 +80,16 @@
 #define USTRNG			"username="
 #define PWDSTRNG		"&pass="
 #if ENCRYPT
-	#define REQUEST		"requestL="
+#define REQUEST		"requestL="
 #else
-	#define REQUEST		""
+#define REQUEST		""
 #endif
 #define UPDATE_SCRIPT	"ducupdate.php"
 
 #ifdef DEBUG
-	#define OPTCHARS	"CYU:Fc:dD:hp:u:x:SMi:K:I:z"
+#define OPTCHARS	"CYU:Fc:dD:hp:u:x:SMi:K:I:z"
 #else
-	#define OPTCHARS	"CYU:Fc:hp:u:x:SMi:K:I:z"
+#define OPTCHARS	"CYU:Fc:hp:u:x:SMi:K:I:z"
 #endif
 #define ARGC			1
 #define ARGF			(1<<1)
@@ -183,7 +182,9 @@
 #include <sys/sockio.h>
 #endif
 
-#include "common.h"
+#define IPLEN			16
+#define LINELEN 	    256
+#define BIGBUFLEN		16384
 
 #define CMSG01	"Can't locate configuration file %s. (Try -c). Ending!\n"
 #define CMSG02	"'%s' is a badly constructed configuration file. Ending!\n"
@@ -233,8 +234,7 @@
 #define CMSG99	"\nThis client has expired.  Please go to http://www.no-ip.com/downloads.php"
 #define CMSG99a	"to get our most recent version.\n"
 
-#define CMSG100 \
-"Error! -C option can only be used with -F -Y -U -I -c -u -p -x options."
+#define CMSG100 "Error! -C option can only be used with -F -Y -U -I -c -u -p -x options."
 #define CMSG101	" Both -u and -p options must be used together."
 
 int	debug			= 	0;
@@ -1675,6 +1675,7 @@ int dynamic_update()
     sprintf(buffer,
             "GET http://%s/%s?%s%s HTTP/1.0\r\n%s\r\n\r\n",
             NOIP_NAME, UPDATE_SCRIPT, REQUEST, pos, USER_AGENT);
+    puts(buffer);
     x = converse_with_web_server();
     if (x < 0)
     {
@@ -1689,7 +1690,7 @@ int dynamic_update()
     response = 0;
     while (GetNextLine(tbuf))
     {
-        p = ourname = tbuf;	// ourname points at the host/group or error
+        p = ourname = tbuf;	// our name points at the host/group or error
         is_group = 1;
         while (*p && (*p != ':'))
         {

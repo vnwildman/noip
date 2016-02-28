@@ -7,8 +7,7 @@ AC_CONFIG_HEADERS([config.h])
 # Checks for programs.
 AC_PROG_CC
 
-AC_ARG_ENABLE(debug,
-AS_HELP_STRING([--enable-debug],[enable debugging, default: no]),
+AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug],[enable debugging, default: no]),
  [case "${enableval}" in
              yes) AC_DEFINE([DEBUG], [1], [Enable debug.]) ;;
              no)  AC_DEFINE([DEBUG], [0], [Disable debug.]) ;;
