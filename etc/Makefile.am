@@ -4,6 +4,6 @@ nobase_sysconf_DATA = init/mininoip.conf\
                          logrotate.d/noip
 
 systemddir = /lib/systemd/system/
-systemd_DATA = mininoip.service
+systemd_DATA = mininoip.service noip.service
 EXTRA_DIST = $(systemd_DATA)
 

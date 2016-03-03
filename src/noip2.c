@@ -56,6 +56,7 @@
 #include <net/if.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/file.h>
 #include <pwd.h>
 #include <time.h>
 
@@ -72,10 +73,11 @@
 #define NOIP_NAME		"dynupdate.no-ip.com"
 #define NOIP_IP_SCRIPT	"ip1.dynupdate.no-ip.com"
 #define CLIENT_IP_PORT	8245
+#define PIDFILE "/var/run/noip"
 
 #define TEMP_ADDR		"127.0.0.1"
 
-#define USER_AGENT		"User-Agent: Linux-DUC/" VERSION
+#define USER_AGENT		"User-Agent: Linux-DUC/" VERSION " (https://github.com/vnwildman/noip)"
 #define SETTING_SCRIPT	"settings.php?"
 #define USTRNG			"username="
 #define PWDSTRNG		"&pass="
@@ -423,6 +425,8 @@ void	autoconf();
 int     bencode(const char *s, char *dst);
 int     bdecode(char *in, char *out);
 void	Msg(char *fmt, ...);
+static void make_pidfile(const char *pidfilename);
+static void drop_root_privileges(void);
 ///////////////////////////////////////////////////////////////////////////
 void Usage()
 {
@@ -463,7 +467,6 @@ void Usage()
 int main(int argc, char *argv[])
 {
     char *p;
-    struct passwd *nobody;
 
     port_to_use = CLIENT_IP_PORT;
     timed_out = 0;
@@ -500,17 +503,7 @@ int main(int argc, char *argv[])
     if (handle_config_error(parse_config()) != SUCCESS)
         return -1;
 
-    /* drop root privileges after reading config */
-    if (geteuid() == 0)
-    {
-        if ((nobody = getpwnam("nobody")) != NULL)   // if "nobody" exists
-        {
-            setgid(nobody->pw_gid);
-            setegid(nobody->pw_gid);
-            setuid(nobody->pw_uid);
-            seteuid(nobody->pw_uid);
-        }
-    }
+    // drop_root_privileges();
 
     if (*IPaddress != 0)
     {
@@ -994,7 +987,10 @@ int run_as_background()
     default:		// parent
         exit(0);
     case 0:		//child
+        make_pidfile(PIDFILE);
+        umask(0);
         setsid();
+        drop_root_privileges();
         if (get_shm_info() == FATALERR)
             return FATALERR;
         log2syslog++;
@@ -1136,7 +1132,13 @@ int Connect(int port)
 
     host = gethostbyname(NOIP_NAME);
     if (!host)
-        return NOHOSTLOOKUP;
+        /*  Wait util internet is online*/
+        do
+        {
+            Sleep(30);
+            host = gethostbyname(NOIP_NAME);
+        } while (!host);
+
     memcpy(&saddr.s_addr, host->h_addr_list[0], 4);
     memset((char *) &addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
@@ -2093,7 +2095,7 @@ int get_update_selection(int tgrp, int thst)
     }
     if ((thst == 0) && (tgrp == 1))
     {
-        if (g->grp == NULL)  	// make groupname exist at top level
+        if (g->grp == NULL)  	// make group name exist at top level
         {
             if (g->glink->grp)
             {
@@ -2224,7 +2226,7 @@ int force_update()
     strcpy(oldIP, IPaddress);
     strcpy(IPaddress, TEMP_ADDR);
     dynamic_update();
-    sleep(100);
+    Sleep(100);
     strcpy(IPaddress, oldIP);
     dynamic_update();
     return SUCCESS;
@@ -2820,4 +2822,55 @@ void Msg(char *fmt, ...)
         fprintf(stderr, "%s\n", errmsg);
 }
 /////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+static void make_pidfile(const char *pidfilename)
+{
+    FILE *pf;         /* We use a FILE to use fprintf */
+    int   fd;         /* File descriptor for pid file */
+    int   opid;       /* Our PID */
+
+    if (access(pidfilename, W_OK) == 0)
+        if (unlink(pidfilename) != 0)
+        {
+            Msg("Could not remove pidfile: %s\n", strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+
+    fd = open(pidfilename, O_CREAT|O_RDWR, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+    if (fd < 0)
+    {
+        Msg("Can't create file: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+    if (flock(fd, LOCK_EX) < 0)
+    {
+        Msg("Unable to lock file: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    pf = fdopen(fd, "w");
+    if (!pf)
+    {
+        Msg("Error: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+    opid = getpid();
+    fprintf(pf, "%d\n", opid);
+    fflush(pf);
+    flock(fd, LOCK_UN);
+    close(fd);
+}
+///////////////////////////////////
+static void drop_root_privileges(void)
+{
+    struct passwd *nobody;
+    if (geteuid() == 0)
+    {
+        if ((nobody = getpwnam("nobody")) != NULL)   // if "nobody" exists
+        {
+            setgid(nobody->pw_gid);
+            setegid(nobody->pw_gid);
+            setuid(nobody->pw_uid);
+            seteuid(nobody->pw_uid);
+        }
+    }
+}

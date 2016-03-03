@@ -1,0 +1,12 @@
+[Unit]
+Description=Linux DUC dynamic IP update for no-ip.com
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/noip
+ExecStart=/usr/sbin/noip
+ExecStop=/usr/sbin/noip -K `/var/run/noip`
+
+[Install]
+WantedBy=multi-user.target
