@@ -26,7 +26,7 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_FUNC_FORK
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([alarm gethostbyname inet_ntoa memset realpath select sleep socket strchr strerror strncasecmp strrchr strstr])
+AC_CHECK_FUNCS([alarm gethostbyname inet_ntoa memset realpath select socket strchr strerror strncasecmp strrchr strstr])
 
 AC_DEFINE([COPYRIGHT_YEAR], [m4_esyscmd([date +%Y])], [Current year that use in copyright message])
 

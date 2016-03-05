@@ -390,10 +390,7 @@ int	validate_IP_addr(char *src, char *dest);
 void	get_our_visible_IPaddr(char *dest);
 void	getip(char *dest, char *device);
 int	run_as_background();
-#ifndef HAVE_SLEEP
-#define sleep(seconds) Sleep (seconds)
 int	Sleep(int seconds);
-#endif // HAVE_SLEEP
 int	Read(int sock, char *buf, size_t count);
 int	Write(int fd, char *buf, size_t count);
 int	Connect(int port);
@@ -1056,7 +1053,7 @@ int run_as_background()
             }
 #endif
             if (background)	// signal may have reset this!
-                sleep(delay);
+                Sleep(delay);
         }
         syslog(LOG_INFO, "v%s daemon ended.\n", VERSION);
         break;
@@ -1138,7 +1135,7 @@ int Connect(int port)
         /*  Wait util internet is online*/
         do
         {
-            sleep(30);
+            Sleep(30);
             host = gethostbyname(NOIP_NAME);
         } while (!host);
 
@@ -2229,7 +2226,7 @@ int force_update()
     strcpy(oldIP, IPaddress);
     strcpy(IPaddress, TEMP_ADDR);
     dynamic_update();
-    sleep(100);
+    Sleep(100);
     strcpy(IPaddress, oldIP);
     dynamic_update();
     return SUCCESS;
